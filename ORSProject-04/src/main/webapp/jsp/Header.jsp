@@ -20,7 +20,6 @@
 	if (isLogin) {
 	%>
 
-
 	<h2><%=welcomeMsg + user.getFirstName()%></h2>
 	<a href="<%=ORSView.ROLE_CTL%>">Add Role</a> |
 	<a href="<%=ORSView.ROLE_LIST_CTL%>">Role List</a> |
@@ -31,17 +30,15 @@
 	<%
 	} else {
 	%>
-
-	<h2>Hii,Guest</h2>
+	<h2>Hii, Guest</h2>
 	<a href="<%=ORSView.LOGIN_CTL%>">Login</a> |
 	<a href="<%=ORSView.USER_REGISTRATION_CTL%>">SignUp</a> |
-
 	<%
 	}
 	%>
 
-      <a href="<%=ORSView.WELCOME_CTL %>">Welcome</a>
+	<a href="<%=ORSView.WELCOME_CTL%>">Welcome</a>
 
-  <hr>
+	<hr>
 </body>
 </html>

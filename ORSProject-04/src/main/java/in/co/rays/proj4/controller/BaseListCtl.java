@@ -21,4 +21,5 @@ public abstract class BaseListCtl<B extends BaseBean, M extends BaseModel> exten
 			throws ServletException, IOException {
 
 	}
+
 }

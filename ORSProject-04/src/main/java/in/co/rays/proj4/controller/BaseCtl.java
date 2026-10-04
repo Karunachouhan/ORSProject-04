@@ -34,17 +34,17 @@ public abstract class BaseCtl<B extends BaseBean, M extends BaseModel> extends H
 	public static final String MSG_SUCCESS = "success";
 	public static final String MSG_ERROR = "error";
 
-	// check input data entered by user
+	// check input data enter by user
 	protected boolean validate(HttpServletRequest request) {
 		return true;
 	}
 
-	// data loaded at the time of HTML page loaded in drop down list
+	// data loaded at the time of HTML page loaded in drop-down list
 	protected void preload(HttpServletRequest request) {
 	}
 
 	// get data from view using request.getParameter() method and set into the bean
-	protected B populatedBean(HttpServletRequest request) {
+	protected B populateBean(HttpServletRequest request) {
 		return null;
 	}
 
@@ -80,6 +80,7 @@ public abstract class BaseCtl<B extends BaseBean, M extends BaseModel> extends H
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 		ServletUtility.forward(getView(), request, response);
 
 	}
@@ -93,10 +94,9 @@ public abstract class BaseCtl<B extends BaseBean, M extends BaseModel> extends H
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
 		System.out.println("service method");
-		
-		if (request.getMethod() == "POST" && validate(request) == false) {
+
+		if (request.getMethod().equals("POST") && validate(request) == false) {
 			ServletUtility.forward(getView(), request, response);
 			return;
 		}
@@ -107,4 +107,5 @@ public abstract class BaseCtl<B extends BaseBean, M extends BaseModel> extends H
 	public abstract M getModel();
 
 	public abstract String getView();
+
 }

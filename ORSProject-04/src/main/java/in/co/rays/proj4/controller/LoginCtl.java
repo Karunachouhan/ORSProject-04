@@ -19,6 +19,7 @@ public class LoginCtl extends BaseCtl<UserBean, UserModel> {
 
 	@Override
 	protected boolean validate(HttpServletRequest request) {
+
 		boolean pass = true;
 
 		if (DataValidator.isNull(request.getParameter("login"))) {
@@ -32,31 +33,31 @@ public class LoginCtl extends BaseCtl<UserBean, UserModel> {
 		}
 
 		return pass;
+
 	}
-    
+
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		String op = request.getParameter("operation");
-		
-		if(op != null) {
+
+		if (op != null) {
 			HttpSession session = request.getSession();
 			session.invalidate();
 		}
-		
+
 		ServletUtility.forward(getView(), request, response);
+
 	}
-	
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		System.out.println("in doPost");
-		
+
 		ServletUtility.forward(getView(), request, response);
 	}
-	
+
 	@Override
 	public UserModel getModel() {
 		return new UserModel();

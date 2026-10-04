@@ -9,7 +9,9 @@
 </head>
 <body>
 	<%@ include file="Header.jsp"%>
+
 	<div align="center">
+
 		<h1>Login</h1>
 
 		<form action="<%=ORSView.LOGIN_CTL%>" method="post">
