@@ -8,7 +8,6 @@ import in.co.rays.proj4.bean.UserBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.exception.DuplicateRecordException;
 import in.co.rays.proj4.util.JDBCDataSource;
-import net.sf.jasperreports.data.jdbc.JdbcDataAdapter;
 
 public class UserModel extends BaseModel<UserBean> {
 
@@ -39,7 +38,7 @@ public class UserModel extends BaseModel<UserBean> {
 			pstmt.setLong(8, bean.getRoleId());
 			pstmt.setInt(9, bean.getUnsuccessfullLogin());
 			pstmt.setString(10, bean.getGender());
-			pstmt.setDate(11, new java.sql.Date(bean.getLastLogin().getTime()));
+			pstmt.setTimestamp(11, bean.getLastLogin());
 			pstmt.setString(12, bean.getUserLock());
 			pstmt.setString(13, bean.getRegisteredIp());
 			pstmt.setString(14, bean.getLastLoginIp());
@@ -85,7 +84,7 @@ public class UserModel extends BaseModel<UserBean> {
 			pstmt.setString(6, bean.getMobileNo());
 			pstmt.setInt(7, bean.getUnsuccessfullLogin());
 			pstmt.setString(8, bean.getGender());
-			pstmt.setDate(9, new java.sql.Date(bean.getLastLogin().getTime()));
+			pstmt.setTimestamp(9, bean.getLastLogin());
 			pstmt.setString(10, bean.getUserLock());
 			pstmt.setString(11, bean.getRegisteredIp());
 			pstmt.setString(12, bean.getLastLoginIp());
@@ -170,6 +169,16 @@ public class UserModel extends BaseModel<UserBean> {
 		}
 
 		return sql.toString();
+	}
+
+	public UserBean authenticate(String login, String password) {
+		UserBean bean = findByLogin(login);
+
+		if (bean != null && bean.getPassword().equals(password)) {
+			return bean;
+		}
+		return null;
+
 	}
 
 	public UserBean findByLogin(String login) {

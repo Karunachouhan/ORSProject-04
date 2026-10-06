@@ -97,7 +97,7 @@ public class TestUserModel {
 		bean.setMobileNo("9876543251");
 		bean.setUnsuccessfullLogin(1);
 		bean.setGender("male");
-		bean.setLastLogin(sdf.parse("2026-09-17"));
+		bean.setLastLogin(new Timestamp(new Date().getTime()));
 		bean.setUserLock("N");
 		bean.setRegisteredIp("192.168.1.14");
 		bean.setLastLoginIp("192.168.1.14");
@@ -125,7 +125,7 @@ public class TestUserModel {
 		bean.setRoleId(2);
 		bean.setUnsuccessfullLogin(3);
 		bean.setGender("male");
-		bean.setLastLogin(sdf.parse("2026-10-07"));
+		bean.setLastLogin(new Timestamp(new Date().getTime()));
 		bean.setUserLock("Y");
 		bean.setRegisteredIp("192.168.1.15");
 		bean.setLastLoginIp("192.168.1.15");

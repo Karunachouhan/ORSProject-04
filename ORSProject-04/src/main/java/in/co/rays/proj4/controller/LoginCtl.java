@@ -3,7 +3,9 @@ package in.co.rays.proj4.controller;
 import java.io.IOException;
 
 import in.co.rays.proj4.bean.UserBean;
+import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.model.UserModel;
+import in.co.rays.proj4.util.DataUtility;
 import in.co.rays.proj4.util.DataValidator;
 import in.co.rays.proj4.util.ServletUtility;
 import jakarta.servlet.ServletException;
@@ -52,8 +54,44 @@ public class LoginCtl extends BaseCtl<UserBean, UserModel> {
 	}
 
 	@Override
+	protected UserBean populateBean(HttpServletRequest request) {
+		UserBean bean = new UserBean();
+
+		bean.setLogin(DataUtility.getString(request.getParameter("login")));
+		bean.setPassword(DataUtility.getString(request.getParameter("password")));
+
+		return bean;
+	}
+
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
+		String op = DataUtility.getString(request.getParameter("operation"));
+
+		UserBean bean = populateBean(request);
+		UserModel model = getModel();
+		// create session
+		HttpSession session = request.getSession();
+
+		if (OP_SIGNIN.equalsIgnoreCase(op)) {
+			try {
+				bean = model.authenticate(bean.getLogin(), bean.getPassword());
+				if (bean != null) {
+
+					// store logged in user in session
+					session.setAttribute("user", bean);
+
+					ServletUtility.setSuccessMessage("Login successfully", request);
+					ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
+					return;
+				} else {
+					ServletUtility.setErrorMessage("Invalid login id or password", request);
+				}
+			} catch (ApplicationException e) {
+				e.printStackTrace();
+			}
+		}
 
 		ServletUtility.forward(getView(), request, response);
 	}
