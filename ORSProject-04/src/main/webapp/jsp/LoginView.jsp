@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <%@page import="in.co.rays.proj4.controller.LoginCtl"%>
 <%@page import="in.co.rays.proj4.util.ServletUtility"%>
@@ -8,6 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+
 	<%
 	String succ = ServletUtility.getSuccessMessage(request);
 	String error = ServletUtility.getErrorMessage(request);
@@ -18,6 +18,7 @@
 	<div align="center">
 
 		<h1>Login</h1>
+
 		<h3 style="color: green"><%=succ%></h3>
 		<h3 style="color: red"><%=error%></h3>
 
@@ -42,7 +43,7 @@
 				<tr>
 					<th></th>
 					<td><input type="submit" name="operation"
-						value="<%=LoginCtl.OP_SIGNIN%>"></td>
+						value="<%=LoginCtl.OP_SIGN_IN%>"></td>
 				</tr>
 
 			</table>

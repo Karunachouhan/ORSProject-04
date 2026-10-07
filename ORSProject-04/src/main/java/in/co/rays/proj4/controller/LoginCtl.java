@@ -2,8 +2,9 @@ package in.co.rays.proj4.controller;
 
 import java.io.IOException;
 
+import in.co.rays.proj4.bean.RoleBean;
 import in.co.rays.proj4.bean.UserBean;
-import in.co.rays.proj4.exception.ApplicationException;
+import in.co.rays.proj4.model.RoleModel;
 import in.co.rays.proj4.model.UserModel;
 import in.co.rays.proj4.util.DataUtility;
 import in.co.rays.proj4.util.DataValidator;
@@ -17,7 +18,7 @@ import jakarta.servlet.http.HttpSession;
 @WebServlet("/LoginCtl")
 public class LoginCtl extends BaseCtl<UserBean, UserModel> {
 
-	public final static String OP_SIGNIN = "SignIn";
+	public final static String OP_SIGN_IN = "SignIn";
 
 	@Override
 	protected boolean validate(HttpServletRequest request) {
@@ -39,22 +40,8 @@ public class LoginCtl extends BaseCtl<UserBean, UserModel> {
 	}
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		String op = request.getParameter("operation");
-
-		if (op != null) {
-			HttpSession session = request.getSession();
-			session.invalidate();
-		}
-
-		ServletUtility.forward(getView(), request, response);
-
-	}
-
-	@Override
 	protected UserBean populateBean(HttpServletRequest request) {
+
 		UserBean bean = new UserBean();
 
 		bean.setLogin(DataUtility.getString(request.getParameter("login")));
@@ -64,36 +51,51 @@ public class LoginCtl extends BaseCtl<UserBean, UserModel> {
 	}
 
 	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		String op = request.getParameter("operation");
+
+		if (op != null) {
+			HttpSession session = request.getSession();
+			ServletUtility.setSuccessMessage("user logout successfully", request);
+			session.invalidate();
+		}
+
+		ServletUtility.forward(getView(), request, response);
+
+	}
+
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		String op = DataUtility.getString(request.getParameter("operation"));
+		HttpSession session = request.getSession();
 
 		UserBean bean = populateBean(request);
 		UserModel model = getModel();
-		// create session
-		HttpSession session = request.getSession();
+		RoleModel rmodel = new RoleModel();
 
-		if (OP_SIGNIN.equalsIgnoreCase(op)) {
-			try {
-				bean = model.authenticate(bean.getLogin(), bean.getPassword());
-				if (bean != null) {
+		if (OP_SIGN_IN.equalsIgnoreCase(op)) {
 
-					// store logged in user in session
-					session.setAttribute("user", bean);
+			bean = model.authenticate(bean.getLogin(), bean.getPassword());
 
-					ServletUtility.setSuccessMessage("Login successfully", request);
-					ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
-					return;
-				} else {
-					ServletUtility.setErrorMessage("Invalid login id or password", request);
-				}
-			} catch (ApplicationException e) {
-				e.printStackTrace();
+			if (bean != null) {
+
+				session.setAttribute("user", bean);
+				RoleBean rbean = rmodel.findByPk(bean.getRoleId());
+				session.setAttribute("role", rbean.getName());
+				ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
+				return;
+
+			} else {
+				ServletUtility.setErrorMessage("Invalid login or password", request);
 			}
 		}
 
 		ServletUtility.forward(getView(), request, response);
+
 	}
 
 	@Override
