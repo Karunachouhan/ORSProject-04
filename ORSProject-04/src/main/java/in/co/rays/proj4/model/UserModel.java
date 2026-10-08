@@ -14,7 +14,7 @@ public class UserModel extends BaseModel<UserBean> {
 	@Override
 	public long add(UserBean bean) throws ApplicationException, DuplicateRecordException {
 		Connection conn = null;
-		Long pk = 0l;
+		long pk = 0;
 
 		UserBean existBean = findByLogin(bean.getLogin());
 
